@@ -39,7 +39,7 @@ func run() error {
 	return nil
 }
 
-var matcher = regexp.MustCompile(`^(FROM|from) \w+ (AS|as) (\w+)$`)
+var matcher = regexp.MustCompile(`^(FROM|from) ([\w:.-]+) (AS|as) (\w+)$`)
 
 func parse(r io.Reader) ([]string, error) {
 	scanner := bufio.NewScanner(r)
@@ -47,8 +47,8 @@ func parse(r io.Reader) ([]string, error) {
 	for scanner.Scan() {
 		line := scanner.Bytes()
 		m := matcher.FindAllSubmatch(line, -1)
-		if len(m) > 0 && len(m[0]) > 3 {
-			result = append(result, string(m[0][3]))
+		if len(m) > 0 && len(m[0]) > 4 {
+			result = append(result, string(m[0][4]))
 		}
 	}
 	return result, scanner.Err()
